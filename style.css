@@ -1,0 +1,310 @@
+/* ---------------------------
+   CSS Variables / Theme
+   --------------------------- */
+:root {
+  --intel-blue: #0007c5;        /* primary brand blue */
+  --intel-deep: #003a63;        /* darker blue for headings / accents */
+  --intel-mint: #dfe1ff;        /* soft background tint */
+  --card-bg: #ffffff;           /* card surface */
+  --card-muted: #f5f8fb;        /* subtle card background */
+  --text: #072034;              /* primary text */
+  --muted-text: #4b6678;        /* subdued text */
+  --glass: rgba(0, 13, 255, 0.6);
+  --shadow: 0 8px 18px rgba(3,18,33,0.12);
+  --radius: 14px;
+  --gap: 1.25rem;
+  --container-padding: 2.25rem;
+  --max-width: 1200px;
+}
+
+/* ---------------------------
+   Base / Page styles
+   --------------------------- */
+* { box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: linear-gradient(180deg, rgba(5,33,61,0.04), rgba(7,32,52,0.03)) fixed;
+  line-height: 1.45;
+}
+
+body {
+  margin: 0;
+}
+
+/* ---------------------------
+   Header / Hero section
+   --------------------------- */
+header {
+  background: linear-gradient(90deg, #000ea3 0%, #0095ff 100%);
+  padding: clamp(1rem, 2.5vw, 2rem);
+  margin-bottom: 1.5rem;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  color: #fff; /* default text color for header */
+}
+
+header img {
+  width: clamp(60px, 8vw, 140px);
+  height: auto;
+  display: block;
+  margin-bottom: 1.2rem;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.06));
+}
+
+header h1 {
+  margin: 0 0 1rem 0; /* fixed 1rem spacing */
+  color: #fff;
+  font-size: clamp(2rem, 5vw, 3rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+header p {
+  margin: 0.5rem 0 0;
+  color: #fff;
+  font-size: clamp(1.1rem, 2vw, 1.3rem);
+  max-width: 60ch;
+}
+
+@media (max-width:520px) {
+  header > div {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* ---------------------------
+   Timeline Section (cards)
+   --------------------------- */
+section {
+  position: relative;
+  display: flex;
+  gap: clamp(1rem, 2.3vw, 2rem);
+  padding: var(--container-padding);
+  background: linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0.5));
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (min-width: 720px) {
+  section::before { display: none; }
+
+  section > div::before {
+    content: "";
+    position: absolute;
+    left: -34px;
+    top: 50%;
+    width: 20px;
+    height: 4px;
+    background: #c3c8d0;
+    border-radius: 2px;
+    transform: translateY(-50%);
+    z-index: 2;
+  }
+  section > div:first-child::before { display: none; }
+
+  section > div {
+    position: relative;
+    z-index: 2;
+  }
+  section > div::after { z-index: 3; }
+}
+
+/* Card styling */
+section > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  min-width: 320px;
+  max-width: 360px;
+  padding: 1.25rem;
+  background: linear-gradient(180deg, var(--card-bg), var(--card-muted));
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(3,18,33,0.08);
+  border: 1px solid rgba(3,18,33,0.04);
+  flex: 0 0 auto;
+  scroll-snap-align: center;
+  position: relative;
+  transition: transform 300ms cubic-bezier(.2,.8,.2,1), box-shadow 300ms, background 300ms;
+  cursor: default;
+}
+
+@media (min-width:720px) {
+  section > div::after {
+    content: "";
+    position: absolute;
+    left: -14px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 14px;
+    height: 14px;
+    background: var(--intel-blue);
+    border-radius: 50%;
+    box-shadow: 0 4px 10px rgba(0,113,197,0.15);
+    border: 3px solid #fff;
+  }
+}
+
+section > div h2 {
+  margin: 0;
+  font-size: 1.05rem;
+  color: var(--intel-blue);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+section > div h3 {
+  margin: 0;
+  font-size: 1.05rem;
+  color: var(--intel-deep);
+  font-weight: 600;
+}
+
+/* Collapsed detail for desktop */
+section > div p {
+  margin: 0;
+  color: var(--muted-text);
+  font-size: 0.95rem;
+  line-height: 1.4;
+  max-height: 0;
+  opacity: 0;
+  transform: translateY(6px);
+  overflow: hidden;
+  transition: max-height 360ms cubic-bezier(.2,.9,0,.9),
+              opacity 300ms,
+              transform 300ms;
+}
+
+/* Hover/focus interactions */
+@media (hover: hover) and (min-width:720px) {
+  section > div:hover,
+  section > div:focus-within {
+    transform: translateY(-6px) scale(1.01);
+    box-shadow: 0 16px 30px rgba(3,18,33,0.14);
+  }
+
+  section > div:hover p,
+  section > div:focus-within p {
+    max-height: 400px;
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Instead of hiding the image, gently fade it */
+  section > div:hover .timeline-img,
+  section > div:focus-within .timeline-img {
+    opacity: 0.35;
+    transition: opacity 300ms;
+  }
+}
+
+/* Mobile stacked layout */
+@media (max-width:719px) {
+  section {
+    flex-direction: column;
+    overflow-x: visible;
+    padding: 1rem;
+    gap: 1rem;
+    scroll-snap-type: none;
+  }
+
+  section > div p {
+    max-height: none;
+    opacity: 1;
+    transform: none;
+    overflow: visible;
+  }
+
+  section > div {
+    min-width: auto;
+    max-width: none;
+    width: 100%;
+    padding: 1rem;
+    border-radius: 10px;
+  }
+
+  section::after {
+    content: "";
+    position: absolute;
+    left: 28px;
+    top: 1.25rem;
+    bottom: 1.25rem;
+    width: 4px;
+    background: linear-gradient(180deg, rgba(0,113,197,0.12), rgba(0,58,99,0.08));
+    border-radius: 999px;
+    pointer-events: none;
+  }
+
+  section > div::after {
+    left: 12px;
+    top: 16px;
+    transform: none;
+  }
+}
+
+/* Accessibility & small UI tweaks */
+section > div:focus-within {
+  outline: 2px solid rgba(0,113,197,0.14);
+  outline-offset: 4px;
+}
+
+body > p {
+  margin-top: 0.75rem;
+  color: var(--muted-text);
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+section > div img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  display: block;
+  object-fit: cover;
+}
+
+section > div img.timeline-img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin-bottom: 0.7rem;
+  transition: opacity 300ms;
+}
+
+/* Specific tweak for 2022 image */
+section > div img[src*="no_co2.jpg"] {
+  width: 50%;
+  height: auto;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Reduced motion for users who prefer less animation */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* Print fallback */
+@media print {
+  body { background: white; }
+  header, section { box-shadow: none; background: white; border: 1px solid #ddd; }
+  section { padding: .5rem; }
+  section > div { box-shadow: none; border: none; }
+}
