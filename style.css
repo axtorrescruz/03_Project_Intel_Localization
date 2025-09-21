@@ -1,4 +1,4 @@
-/* ---------------------------
+ /* ---------------------------
    CSS Variables / Theme
    --------------------------- */
 :root {
@@ -82,10 +82,14 @@ header p {
   }
 }
 
-/* ---------------------------
-   Timeline Section (cards)
-   --------------------------- */
-section {
+/* ---------------------------------------------------------------------
+   TIMELINE STYLES (SCOPED)
+   All timeline styles are scoped to section.timeline so other <section>
+   elements on the page are unaffected. This preserves the original
+   timeline look while allowing the three-col and newsletter areas to
+   use different styles.
+   --------------------------------------------------------------------- */
+section.timeline {
   position: relative;
   display: flex;
   gap: clamp(1rem, 2.3vw, 2rem);
@@ -99,9 +103,10 @@ section {
 }
 
 @media (min-width: 720px) {
-  section::before { display: none; }
+  section.timeline::before { display: none; }
 
-  section > div::before {
+  /* timeline connector line */
+  section.timeline > div[tabindex]::before {
     content: "";
     position: absolute;
     left: -34px;
@@ -113,17 +118,17 @@ section {
     transform: translateY(-50%);
     z-index: 2;
   }
-  section > div:first-child::before { display: none; }
+  section.timeline > div[tabindex]:first-child::before { display: none; }
 
-  section > div {
+  section.timeline > div[tabindex] {
     position: relative;
     z-index: 2;
   }
-  section > div::after { z-index: 3; }
+  section.timeline > div[tabindex]::after { z-index: 3; }
 }
 
-/* Card styling */
-section > div {
+/* Timeline card styling (only affects the timeline) */
+section.timeline > div[tabindex] {
   display: flex;
   flex-direction: column;
   gap: 0.6rem;
@@ -141,8 +146,9 @@ section > div {
   cursor: default;
 }
 
+/* Blue dot (timeline marker) kept only for timeline */
 @media (min-width:720px) {
-  section > div::after {
+  section.timeline > div[tabindex]::after {
     content: "";
     position: absolute;
     left: -14px;
@@ -157,7 +163,8 @@ section > div {
   }
 }
 
-section > div h2 {
+/* Timeline headings inside scoped timeline cards */
+section.timeline > div[tabindex] h2 {
   margin: 0;
   font-size: 1.05rem;
   color: var(--intel-blue);
@@ -165,15 +172,15 @@ section > div h2 {
   letter-spacing: 0.02em;
 }
 
-section > div h3 {
+section.timeline > div[tabindex] h3 {
   margin: 0;
   font-size: 1.05rem;
   color: var(--intel-deep);
   font-weight: 600;
 }
 
-/* Collapsed detail for desktop */
-section > div p {
+/* Collapsed detail for desktop (timeline only) */
+section.timeline > div[tabindex] p {
   margin: 0;
   color: var(--muted-text);
   font-size: 0.95rem;
@@ -187,32 +194,32 @@ section > div p {
               transform 300ms;
 }
 
-/* Hover/focus interactions */
+/* Hover/focus interactions for timeline only */
 @media (hover: hover) and (min-width:720px) {
-  section > div:hover,
-  section > div:focus-within {
+  section.timeline > div[tabindex]:hover,
+  section.timeline > div[tabindex]:focus-within {
     transform: translateY(-6px) scale(1.01);
     box-shadow: 0 16px 30px rgba(3,18,33,0.14);
   }
 
-  section > div:hover p,
-  section > div:focus-within p {
+  section.timeline > div[tabindex]:hover p,
+  section.timeline > div[tabindex]:focus-within p {
     max-height: 400px;
     opacity: 1;
     transform: translateY(0);
   }
 
-  /* Instead of hiding the image, gently fade it */
-  section > div:hover .timeline-img,
-  section > div:focus-within .timeline-img {
+  /* Gently fade image on timeline hover/focus */
+  section.timeline > div[tabindex]:hover .timeline-img,
+  section.timeline > div[tabindex]:focus-within .timeline-img {
     opacity: 0.35;
     transition: opacity 300ms;
   }
 }
 
-/* Mobile stacked layout */
+/* Mobile stacked layout for timeline */
 @media (max-width:719px) {
-  section {
+  section.timeline {
     flex-direction: column;
     overflow-x: visible;
     padding: 1rem;
@@ -220,14 +227,14 @@ section > div p {
     scroll-snap-type: none;
   }
 
-  section > div p {
+  section.timeline > div[tabindex] p {
     max-height: none;
     opacity: 1;
     transform: none;
     overflow: visible;
   }
 
-  section > div {
+  section.timeline > div[tabindex] {
     min-width: auto;
     max-width: none;
     width: 100%;
@@ -235,7 +242,7 @@ section > div p {
     border-radius: 10px;
   }
 
-  section::after {
+  section.timeline::after {
     content: "";
     position: absolute;
     left: 28px;
@@ -247,27 +254,20 @@ section > div p {
     pointer-events: none;
   }
 
-  section > div::after {
+  section.timeline > div[tabindex]::after {
     left: 12px;
     top: 16px;
     transform: none;
   }
 }
 
-/* Accessibility & small UI tweaks */
-section > div:focus-within {
+/* Accessibility & small UI tweaks for timeline */
+section.timeline > div[tabindex]:focus-within {
   outline: 2px solid rgba(0,113,197,0.14);
   outline-offset: 4px;
 }
 
-body > p {
-  margin-top: 0.75rem;
-  color: var(--muted-text);
-  text-align: center;
-  font-size: 0.9rem;
-}
-
-section > div img {
+section.timeline > div[tabindex] img {
   max-width: 100%;
   height: auto;
   border-radius: 8px;
@@ -275,7 +275,7 @@ section > div img {
   object-fit: cover;
 }
 
-section > div img.timeline-img {
+section.timeline > div[tabindex] img.timeline-img {
   display: block;
   max-width: 100%;
   height: auto;
@@ -284,8 +284,8 @@ section > div img.timeline-img {
   transition: opacity 300ms;
 }
 
-/* Specific tweak for 2022 image */
-section > div img[src*="no_co2.jpg"] {
+/* Specific tweak for 2022 image (timeline) */
+section.timeline > div[tabindex] img[src*="no_co2.jpg"] {
   width: 50%;
   height: auto;
   display: block;
@@ -293,7 +293,109 @@ section > div img[src*="no_co2.jpg"] {
   margin-right: auto;
 }
 
-/* Reduced motion for users who prefer less animation */
+/* ---------------------------
+   THREE-COLUMN SECTION STYLES (three-col)
+   These rules make the three-col area simple text + icon columns —
+   no timeline markers, no hover-to-reveal, no dot, and text is always visible.
+   --------------------------- */
+
+.three-col {
+  /* keep overall spacing similar but don't impose timeline visuals */
+  padding-top: 0;
+  padding-bottom: 0;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.three-col .container {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+/* Basic styling for each column (uses text-center in HTML) */
+.three-col .col-12, 
+.three-col .col-md-4 {
+  /* nothing forcing card layout — keep it clean and flowing */
+}
+
+/* Icon spacing and sizing */
+.three-col .bi {
+  display: inline-block;
+  margin-bottom: 0.5rem;
+  /* use current color utilities in html; font-size set in HTML for simplicity */
+}
+
+/* Headings and body in three-col: always visible */
+.three-col h3 {
+  margin-top: 0.25rem;
+  margin-bottom: 0.5rem;
+  color: var(--intel-deep);
+  font-weight: 700;
+}
+
+.three-col p {
+  margin-bottom: 0.75rem;
+  color: var(--muted-text);
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+/* Style the "Learn More" links in three-col so they look like subtle CTAs */
+.three-col .three-col-link {
+  display: inline-block;
+  text-decoration: none;
+  padding: 0.45rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid rgba(0,58,99,0.06);
+  background: transparent;
+  color: var(--intel-blue);
+  font-weight: 600;
+  transition: background 180ms, transform 180ms;
+}
+
+/* Hover when available (subtle) */
+@media (hover: hover) {
+  .three-col .three-col-link:hover {
+    background: rgba(0,7,197,0.04);
+    transform: translateY(-2px);
+    text-decoration: none;
+  }
+}
+
+/* Ensure three-col respects RTL: use logical margins if needed (no left/right hard-coding) */
+/* The HTML uses text-center; adjust if you need start/end alignment: e.g. .text-md-left -> .text-md-start */
+
+/* ---------------------------
+   NEWSLETTER SECTION (newsletter)
+   Keep the subscription form simple — no timeline visuals or dot markers.
+   --------------------------- */
+
+.newsletter {
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+/* Keep form contained but not card-like */
+.newsletter .p-3 {
+  padding: 1rem !important;
+  background: transparent;
+  border: none;
+}
+
+/* Make the subscribe button clearly visible */
+.newsletter .btn-primary {
+  font-weight: 600;
+}
+
+/* Accessibility: ensure label/readable sizes */
+.newsletter label {
+  font-weight: 600;
+  color: var(--intel-deep);
+}
+
+/* ---------------------------
+   Reduced motion & print
+   --------------------------- */
 @media (prefers-reduced-motion: reduce) {
   * {
     transition: none !important;
@@ -301,10 +403,55 @@ section > div img[src*="no_co2.jpg"] {
   }
 }
 
-/* Print fallback */
+/* Print adjustments */
 @media print {
   body { background: white; }
-  header, section { box-shadow: none; background: white; border: 1px solid #ddd; }
-  section { padding: .5rem; }
-  section > div { box-shadow: none; border: none; }
+  header { box-shadow: none; background: white; border: 1px solid #ddd; }
+  section.timeline { box-shadow: none; background: white; border: 1px solid #ddd; padding: .5rem; }
+  section.timeline > div[tabindex] { box-shadow: none; border: none; }
 }
+
+/* Footer styles */
+footer {
+  background: #f8f9fa; /* light gray background */
+  padding: 1rem 0;
+  margin-top: 2rem;
+  text-align: center;
+  font-size: 1rem;
+  border-top: 1px solid #e2e2e2;
+}
+
+footer nav a {
+  color: #003a63;
+  text-decoration: none;
+  margin: 0 0.5rem;
+}
+
+footer nav a:hover {
+  text-decoration: underline;
+}
+
+/* Newsletter respects the page direction.
+   If the page is LTR, keep LTR input alignment; if RTL, follow RTL. */
+html[dir="ltr"] form[aria-labelledby="newsletterTitle"] {
+  direction: ltr;
+  text-align: left;
+}
+
+html[dir="rtl"] form[aria-labelledby="newsletterTitle"] {
+  direction: rtl;
+  text-align: right;
+}
+
+
+/* ---------------------------------------------------------------------
+  Notes:
+  - Timeline uses selectors scoped to section.timeline and div[tabindex]
+    so its "card" behavior and blue dot remain only inside that block.
+  - three-col and newsletter sections are intentionally not styled as cards:
+    no box-shadow, no rounded card background, no blue dot, and there is
+    no hover-to-reveal behaviour — their text is always visible.
+  - If you still see timeline styling in the three-col area, ensure your
+    HTML uses the classes exactly ("timeline", "three-col", "newsletter")
+    and that you're loading this stylesheet after Bootstrap.
+   --------------------------------------------------------------------- */
